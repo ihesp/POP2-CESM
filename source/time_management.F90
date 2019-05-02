@@ -10,7 +10,7 @@
 !  flags and other functions related to model time.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: time_management.F90 86937 2017-10-10 17:01:18Z altuntas@ucar.edu $
 !
 ! !USES:
 

@@ -8,7 +8,7 @@
 !  for writing fields.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: io_binary.F90 63715 2014-09-22 22:47:53Z klindsay $
 
 ! !USES:
 

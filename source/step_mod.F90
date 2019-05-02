@@ -9,7 +9,7 @@
 !  Contains the routine for stepping the model forward one timestep
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: step_mod.F90 87926 2017-12-12 00:31:20Z nanr $
 !
 ! !USES:
 

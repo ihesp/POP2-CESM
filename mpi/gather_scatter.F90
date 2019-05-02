@@ -20,7 +20,7 @@
 !  of blocks of data (eg from baroclinic to barotropic and back).
 !
 ! !REVISION HISTORY:
-!  SVN: $Id$
+!  SVN: $Id: gather_scatter.F90 61452 2014-06-25 20:16:00Z jedwards $
 
 ! !USES:
 

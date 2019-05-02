@@ -11,7 +11,7 @@
 !  parameterization (e.g. Pacanowski-Philander).
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: vmix_rich.F90 808 2006-04-28 17:06:38Z njn01 $
 
 ! !USES
 

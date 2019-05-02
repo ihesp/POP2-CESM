@@ -9,7 +9,7 @@
 !  baroclinic velocities and tracer fields.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: baroclinic.F90 87926 2017-12-12 00:31:20Z nanr $
 
 ! !USES:
 

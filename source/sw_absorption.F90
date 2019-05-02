@@ -39,7 +39,7 @@
 !   held fixed over the month in this implementation.
 
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: sw_absorption.F90 26603 2011-01-28 23:09:02Z njn01 $
 
 ! !USES:
 

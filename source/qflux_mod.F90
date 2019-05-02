@@ -9,7 +9,7 @@
 !  This module supports time-averaged qflux computations
 !
 ! !REVISION HISTORY:
-! SVN:$Id$
+! SVN:$Id: qflux_mod.F90 87926 2017-12-12 00:31:20Z nanr $
 !
 
 ! !USES:

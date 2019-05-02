@@ -8,7 +8,7 @@
 !  This module contains all the prognostic variables used in POP.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: prognostic.F90 22881 2010-05-11 04:23:39Z njn01 $
 
 ! !USES:
 

@@ -10,7 +10,7 @@
 !     recording events that have occurred in CCSM POP
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: registry.F90 12674 2008-10-31 22:21:32Z njn01 $
 
 ! !USES:
 

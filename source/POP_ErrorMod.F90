@@ -23,7 +23,7 @@
 !  to a coupler for a proper call to the POP finalize method.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: POP_ErrorMod.F90 16641 2009-06-12 17:00:31Z njn01 $
 !  2006-07-10: Phil Jones
 !     Added new error module for logging and printing error messages.
 !

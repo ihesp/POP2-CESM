@@ -9,7 +9,7 @@
 !  This module contains f90 derived type information for passive tracers
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: tracer_types.F90 808 2006-04-28 17:06:38Z njn01 $
 
 ! !USES:
  

@@ -22,7 +22,7 @@
 !  \end{enumerate}
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: state_mod.F90 26114 2010-12-17 20:29:34Z njn01 $
 
 ! !USES:
 

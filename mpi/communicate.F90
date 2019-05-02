@@ -9,7 +9,7 @@
 !  communicating between processors.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: communicate.F90 12674 2008-10-31 22:21:32Z njn01 $
 !  2006-07-10: Phil Jones
 !              edited to use new POP comm module - this module
 !                 now for back compatibility only 

@@ -12,7 +12,7 @@
 !  querying the block decomposition for a global domain.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: blocks.F90 44198 2013-02-25 22:43:22Z mlevy@ucar.edu $
 !
 ! !USES:
 

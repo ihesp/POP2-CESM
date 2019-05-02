@@ -11,7 +11,7 @@
 !  and flushm
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: exit_mod.F90 35325 2012-03-09 00:48:12Z njn01 $
 
 ! !USES:
 

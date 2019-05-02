@@ -9,7 +9,7 @@
 !  This is the main driver module for UVEL and VVEL damping.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: damping.F90 65485 2014-11-16 22:26:36Z mlevy@ucar.edu $
 !
 ! !USES:
 

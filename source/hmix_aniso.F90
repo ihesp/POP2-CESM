@@ -13,7 +13,7 @@
 !  stress isotropic.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: hmix_aniso.F90 21356 2010-03-01 22:12:38Z njn01 $
 
 ! !USES:
 

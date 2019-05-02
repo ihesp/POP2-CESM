@@ -9,7 +9,7 @@
 !  Contains routine for computing change in surface height.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: surface_hgt.F90 87926 2017-12-12 00:31:20Z nanr $
 
 ! !USES:
 

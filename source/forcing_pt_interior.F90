@@ -10,7 +10,7 @@
 !  interior potential temperature restoring.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: forcing_pt_interior.F90 63792 2014-09-25 14:36:26Z mlevy@ucar.edu $
 !
 ! !USES
 

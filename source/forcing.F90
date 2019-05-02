@@ -12,7 +12,7 @@
 !  update routines for those fields.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: forcing.F90 87926 2017-12-12 00:31:20Z nanr $
 !
 ! !USES:
 

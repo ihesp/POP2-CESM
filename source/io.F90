@@ -10,7 +10,7 @@
 !  for writing arrays.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: io.F90 63715 2014-09-22 22:47:53Z klindsay $
 
 ! !USES:
 

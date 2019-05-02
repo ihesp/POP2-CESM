@@ -10,7 +10,7 @@
 !  viscosity for constant vertical mixing.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: vmix_const.F90 808 2006-04-28 17:06:38Z njn01 $
 
 ! !USES:
 

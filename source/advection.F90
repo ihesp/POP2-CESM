@@ -13,7 +13,7 @@
 !  tracers.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: advection.F90 87926 2017-12-12 00:31:20Z nanr $
 
 ! !USES:
    use POP_KindsMod

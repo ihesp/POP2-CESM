@@ -11,7 +11,7 @@
 !  forcing at the surface.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: forcing_ap.F90 12674 2008-10-31 22:21:32Z njn01 $
 !
 ! !USES:
 

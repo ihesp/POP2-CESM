@@ -9,7 +9,7 @@
 !  ccsm coupled ocean model
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: ms_balance.F90 38648 2012-07-12 19:51:27Z mlevy@ucar.edu $
 !
 ! !USES:
 

@@ -9,7 +9,7 @@
 !  particular version contains MPI versions of these routines.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: broadcast.F90 901 2006-05-08 20:47:20Z njn01 $
 !
 ! !USES:
 

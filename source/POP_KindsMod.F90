@@ -24,7 +24,7 @@
 !  character length, the default value may be increased.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: POP_KindsMod.F90 22881 2010-05-11 04:23:39Z njn01 $
 
 ! !USES:
 !  uses no other modules

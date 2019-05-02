@@ -12,7 +12,7 @@
 !  to ccsm netCDF output files
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: io_ccsm.F90 27495 2011-03-25 21:46:00Z njn01 $
 !  
 ! 
 

@@ -9,7 +9,7 @@
 !  for writing arrays in netCDF format using pio.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: io_netcdf.F90 70365 2015-04-27 16:31:50Z jedwards $
 
 ! !USES:
 

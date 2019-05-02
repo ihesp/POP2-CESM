@@ -10,7 +10,7 @@
 !  types like integer, character, logical, real4 and real8.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: kinds_mod.F90 12674 2008-10-31 22:21:32Z njn01 $
 
 ! !USES:
 !  uses no other modules

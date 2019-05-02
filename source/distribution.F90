@@ -9,7 +9,7 @@
 !  blocks across processors.
 !
 ! !REVISION HISTORY:
-!  CVS:$Id$
+!  CVS:$Id: distribution.F90 43213 2013-01-11 18:24:48Z mlevy@ucar.edu $
 !  CVS:$Name:  $
 
 ! !USES:

@@ -13,7 +13,7 @@
 !  entries in some ghost cells.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: operators.F90 808 2006-04-28 17:06:38Z njn01 $
 
 ! !USES:
 

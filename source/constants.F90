@@ -10,7 +10,7 @@
 !  used throughout the Parallel Ocean Program.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: constants.F90 24379 2010-08-13 19:54:51Z njn01 $
 
 ! !USES:
 

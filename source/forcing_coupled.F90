@@ -12,7 +12,7 @@
 !  be specified during the make process.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: forcing_coupled.F90 87926 2017-12-12 00:31:20Z nanr $
 !
 ! !USES:
  

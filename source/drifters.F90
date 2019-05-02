@@ -12,7 +12,7 @@
 !  Mat is ready to add it in...
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: drifters.F90 2290 2006-10-25 18:23:10Z njn01 $
 !
 ! !USES
 

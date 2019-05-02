@@ -12,7 +12,7 @@
 !  CM-5 version and must be re-done.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: hydro_sections.F90 808 2006-04-28 17:06:38Z njn01 $
 
 ! !USES:
 

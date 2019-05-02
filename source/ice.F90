@@ -13,7 +13,7 @@
 !  subroutinized ice model.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: ice.F90 17759 2009-08-12 20:20:36Z njn01 $
 
 ! !USES:
 

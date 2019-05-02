@@ -24,7 +24,7 @@
 ! !REFDOC:
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: POP_IOUnitsMod.F90 29587 2011-08-03 22:59:39Z mvertens $
 !  2006-08-21: Phil Jones
 !     added wrapper for system flush routine
 !  2006-08-15: Phil Jones

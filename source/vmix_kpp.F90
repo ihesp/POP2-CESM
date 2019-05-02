@@ -12,7 +12,7 @@
 !  November 1994).
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: vmix_kpp.F90 65408 2014-11-13 20:08:35Z mlevy@ucar.edu $
 
 ! !USES:
 

@@ -9,7 +9,7 @@
 !  surface fresh water flux.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: forcing_sfwf.F90 24379 2010-08-13 19:54:51Z njn01 $
 !
 ! !USES:
 

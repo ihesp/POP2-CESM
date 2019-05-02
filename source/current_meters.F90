@@ -11,7 +11,7 @@
 !        are appended but must be re-done.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: current_meters.F90 808 2006-04-28 17:06:38Z njn01 $
 
 ! !USES:
 

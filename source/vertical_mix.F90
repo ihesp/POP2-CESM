@@ -18,7 +18,7 @@
 !  \end{itemize}
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: vertical_mix.F90 61677 2014-07-03 23:42:39Z mlevy@ucar.edu $
 
 ! !USES:
 

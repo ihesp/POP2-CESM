@@ -9,7 +9,7 @@
 !  time-averages of selected fields and writing this data to files.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: tavg.F90 56176 2013-12-20 18:35:46Z mlevy@ucar.edu $
 !  
 
 ! !USES:
@@ -4428,7 +4428,7 @@
  call add_attrib_file(tavg_file_desc, 'contents', 'Diagnostic and Prognostic Variables')
  call add_attrib_file(tavg_file_desc, 'source', 'CCSM POP2, the CCSM Ocean Component')
  call add_attrib_file(tavg_file_desc, 'revision', &
-   '$Id$')
+   '$Id: tavg.F90 56176 2013-12-20 18:35:46Z mlevy@ucar.edu $')
 
  if (allow_leapyear) then
     write(calendar,'(a,i5,a,i5,a)') &

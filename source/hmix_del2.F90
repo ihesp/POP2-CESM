@@ -10,7 +10,7 @@
 !  diffusion of momentum and tracers.
 !
 ! !REVISION HISTORY:
-!  SVN:$Id$
+!  SVN:$Id: hmix_del2.F90 55656 2013-11-26 22:01:15Z mlevy@ucar.edu $
 
 ! !USES:
 
