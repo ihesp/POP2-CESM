@@ -257,7 +257,7 @@
   <entry id="POP_MXBLCKS">
     <type>integer</type>
     <valid_values></valid_values>
-    <default_value>0</default_value>
+    <default_value>1</default_value>
     <group>build_component_pop</group>
     <file>env_build.xml</file>
     <desc>Max number of pop blocks per processor (do not edit if POP_AUTO_DECOMP is TRUE</desc>
