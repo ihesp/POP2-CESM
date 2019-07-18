@@ -47,6 +47,7 @@
 ! !INTERFACE:
 
  subroutine exit_POP(exit_mode, exit_message, out_unit)
+   use shr_abort_mod, only : shr_abort_backtrace
 
 ! !DESCRIPTION:
 !  This routine prints a message, exits any message environment
@@ -102,6 +103,7 @@
       case(sigExit)
          write (local_unit,'(a14)') 'POP exiting...'
       case(sigAbort)
+         call shr_abort_backtrace()
          write (local_unit,'(a15)') 'POP aborting...'
       case default
          write (local_unit,'(a37)') 'POP exiting with unknown exit mode...'

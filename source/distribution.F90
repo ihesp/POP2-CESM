@@ -557,7 +557,6 @@
    xdim = Factor(nblocks_x)
    ydim = Factor(nblocks_y)
    numfac = xdim%numfact
-
    !---------------------------------------------
    ! Match the common factors to create SFC curve
    !---------------------------------------------

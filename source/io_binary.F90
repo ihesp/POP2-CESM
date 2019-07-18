@@ -1915,8 +1915,11 @@
       krecs = nz/data_file%num_iotasks + 1
    endif
 
-   if (my_task < data_file%num_iotasks) &
+   if (my_task < data_file%num_iotasks) then
       allocate(IOBUFD(nx_global,ny_global))
+   else
+      allocate(IOBUFD(1,1))
+   endif
 
 !-----------------------------------------------------------------------
 !
@@ -1933,6 +1936,7 @@
          if (klvl <= nz) then
             read(data_file%id(1), rec=start_record+klvl-1) IOBUFD
          endif
+  
       endif
 
       do n=1,data_file%num_iotasks
@@ -1945,7 +1949,7 @@
 
    end do
 
-   if (my_task < data_file%num_iotasks) deallocate(IOBUFD)
+   deallocate(IOBUFD)
 #endif
 
 !-----------------------------------------------------------------------

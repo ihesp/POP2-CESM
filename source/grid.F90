@@ -2134,6 +2134,9 @@
       INQUIRE(iolength=reclength) DZBC_G
       open(nu, file=bottom_cell_file,status='old',form='unformatted', &
                access='direct', recl=reclength, iostat=ioerr)
+   else
+      ! prevents an error condition in debug mode
+      allocate(DZBC_G(1,1))
    endif
 
    call broadcast_scalar(ioerr, master_task)
@@ -2153,7 +2156,7 @@
 
    call scatter_global(DZBC, DZBC_G, master_task, distrb_clinic, &
                        field_loc_center, field_type_scalar)
-   if (my_task == master_task) deallocate(DZBC_G)
+   deallocate(DZBC_G)
 
 !-----------------------------------------------------------------------
 !EOC
@@ -2626,6 +2629,8 @@
       inquire (iolength=reclength) REGION_G
       open(nu, file=mask_filename,status='old',form='unformatted', &
                access='direct', recl=reclength, iostat=ioerr)
+   else
+      allocate(REGION_G(1,1))
    endif
 
    call broadcast_scalar(ioerr, master_task)
@@ -2644,7 +2649,7 @@
 
    call scatter_global(REGION_MASK, REGION_G, master_task,distrb_clinic, &
                        field_loc_center, field_type_scalar)
-   if (my_task == master_task) deallocate(REGION_G)
+   deallocate(REGION_G)
 
    num_regions = global_maxval(abs(REGION_MASK), &
                                distrb_clinic, field_loc_center)

@@ -13,7 +13,7 @@ module POP_SpaceCurveMod
 
 ! !USES:
    use kinds_mod
-
+   use exit_mod, only: sigAbort, exit_POP
    implicit none
 
 ! !PUBLIC TYPES: 
@@ -1115,6 +1115,9 @@ contains
       ierr = PeanoM(l,type,ma,md,ja,jd)
    elseif ( type == 5) then 
       ierr = Cinco(l,type,ma,md,ja,jd)
+   else 
+      print *,'type =',type
+      call exit_POP(sigAbort,'Bad type for GenCurve')
    endif
 
 !EOP
@@ -1128,6 +1131,7 @@ contains
        logical :: found
        integer (int_kind) :: i
 
+       res = 1
        found = .false.
        i=1
        do while (i<=fac%numfact .and. (.not. found))
@@ -1325,7 +1329,10 @@ contains
    else
      res%numfact = -1
    endif
-
+   if (res%numfact==0) then
+      print *,__FILE__,__LINE__,num, res%numfact, res%factors
+      call exit_POP(sigAbort,'Failed to find factors')
+   endif
 !EOP
 !---------------------------------------------------------
    end function Factor
