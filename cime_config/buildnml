@@ -312,7 +312,7 @@ def _construct_ecosys_diagnostics(caseroot, ocn_grid, run_type, continue_run, oc
 def _main_func():
 
     caseroot = parse_input(sys.argv)
-    with Case(caseroot) as case:
+    with Case(caseroot, read_only=False) as case:
         buildnml(case, caseroot, "pop")
 
 if __name__ == "__main__":
