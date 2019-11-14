@@ -61,7 +61,7 @@
    use passive_tracers, only: set_interior_passive_tracers,  &
        reset_passive_tracers, tavg_passive_tracers, &
        tavg_passive_tracers_baroclinic_correct, &
-       set_interior_passive_tracers_3D
+       set_interior_passive_tracers_3D, tavg_TEND_TRACER
    use exit_mod, only: sigAbort, exit_pop, flushm
    use overflows
    use overflow_type
@@ -101,6 +101,7 @@
       tavg_dTEMP_NEG_2D, &! tavg id for negative temperature timestep difference
       tavg_SST,          &! tavg id for surface temperature
       tavg_SST2,         &! tavg id for surface temperature squared
+      tavg_SSS,          &! tavg id for surface salinity
       tavg_SALT,         &! tavg id for salinity
       tavg_SALT_2,       &! tavg id for salinity	
       tavg_SALT_MAX,     &! tavg id for maximum salinity
@@ -125,6 +126,8 @@
       tavg_V1_8,         &! tavg id for V           in top 8 lvls
       tavg_U1_1,         &! tavg id for U           in top 1 lvl
       tavg_V1_1,         &! tavg id for V           in top 1 lvl
+      tavg_U2_2,         &! tavg id for U           in second lvl
+      tavg_V2_2,         &! tavg id for V           in second lvl
       tavg_RESID_T,      &! free-surface residual flux (T)
       tavg_RESID_S        ! free-surface residual flux (S)
 
@@ -243,6 +246,14 @@
                           long_name='Meridional Velocity lvls 1-1',    &
                           units='centimeter/s', grid_loc='2221')
 
+   call define_tavg_field(tavg_U2_2,'U2_2',2,                          &
+                          long_name='Zonal Velocity lvls 2-2',         &
+                          units='centimeter/s', grid_loc='2221')
+
+   call define_tavg_field(tavg_V2_2,'V2_2',2,                          &
+                          long_name='Meridional Velocity lvls 2-2',    &
+                          units='centimeter/s', grid_loc='2221')
+
    call define_tavg_field(tavg_U1_8,'U1_8',2,                          &
                           long_name='Zonal Velocity lvls 1-8',         &
                           units='centimeter/s', grid_loc='2221')
@@ -354,6 +365,11 @@
    call define_tavg_field(tavg_SST2,'SST2',2,                          &
                           long_name='Surface Potential Temperature**2',&
                           units='degC', grid_loc='2110',               &
+                          coordinates='TLONG TLAT time')
+
+   call define_tavg_field(tavg_SSS,'SSS',2,                            &
+                          long_name='Surface Salinity',   &
+                          units='gram/kilogram', grid_loc='2110',               &
                           coordinates='TLONG TLAT time')
 
    call define_tavg_field(tavg_SALT,'SALT',3,                          &
@@ -663,6 +679,9 @@
          if (k <= 1)  &
             call accumulate_tavg_field(UVEL(:,:,k,curtime,iblock), &
                                        tavg_U1_1,iblock,k)
+         if (k == 2)  &
+            call accumulate_tavg_field(UVEL(:,:,k,curtime,iblock), &
+                                       tavg_U2_2,iblock,k)
          if (k <= 8)  &
          call accumulate_tavg_field(UVEL(:,:,k,curtime,iblock),tavg_U1_8,iblock,k)
 
@@ -674,6 +693,9 @@
 
          if (k <= 1)  &
          call accumulate_tavg_field(VVEL(:,:,k,curtime,iblock),tavg_V1_1,iblock,k)
+
+         if (k == 2)  &
+         call accumulate_tavg_field(VVEL(:,:,k,curtime,iblock),tavg_V2_2,iblock,k)
 
          if (k <= 8)  &
          call accumulate_tavg_field(VVEL(:,:,k,curtime,iblock),tavg_V1_8,iblock,k)
@@ -725,6 +747,9 @@
          if (k == 1)  then
             call accumulate_tavg_field(TRACER(:,:,1,1,curtime,iblock), &
                                        tavg_SST,iblock,1)
+
+            call accumulate_tavg_field(TRACER(:,:,1,2,curtime,iblock), &
+                                       tavg_SSS,iblock,1)
 
             call accumulate_tavg_field(TRACER(:,:,1,1,curtime,iblock)**2, &
                                        tavg_SST2,iblock,1)
@@ -1213,6 +1238,9 @@
       n,                  &! tracer index
       iblock               ! block index
 
+   real (r8), dimension(nx_block,ny_block) :: &
+      WORK
+
    real (r8), dimension(nx_block,ny_block,nt) :: &
       RHS1                 ! r.h.s. for impvmix on corrector step
 
@@ -1433,6 +1461,26 @@
       if (nt > 2) call reset_passive_tracers(  &
          TRACER(:,:,:,:,newtime,iblock), iblock)
 
+!-----------------------------------------------------------------------
+!
+!     compute tendency of thickness weighted TEMP and SALT
+!
+!-----------------------------------------------------------------------
+
+      if (mix_pass /= 1) then
+        do n = 1,nt
+            k = 1
+            WORK = c1 / c2dtt(k) *    &
+              ((c1 + PSURF(:,:,newtime,iblock)/grav/dz(k))*TRACER(:,:,k,n,newtime,iblock) - &
+               (c1 + PSURF(:,:,oldtime,iblock)/grav/dz(k))*TRACER(:,:,k,n,oldtime,iblock))
+            call accumulate_tavg_field(WORK, tavg_TEND_TRACER(n), iblock, k)
+            do k=2,km
+               WORK = (TRACER(:,:,k,n,newtime,iblock) -             &
+                       TRACER(:,:,k,n,oldtime,iblock)) / c2dtt(k)
+               call accumulate_tavg_field(WORK, tavg_TEND_TRACER(n), iblock, k)
+            end do
+        end do
+      endif
 
 !-----------------------------------------------------------------------
 !
