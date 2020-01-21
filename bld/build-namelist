@@ -1207,6 +1207,18 @@ if (any(\@OCN_TRACER_MODULES, "iage")) {
 }
 
 ##########################################
+# namelist group: filter_nml             #
+##########################################
+
+add_default($nl, 'l_sst_filter');
+add_default($nl, 'filter_type');
+add_default($nl, 'filter_x_span');
+add_default($nl, 'filter_y_span');
+add_default($nl, 'filter_r_span');
+add_default($nl, 'filter_print');
+add_default($nl, 'n_filter_regions');
+
+##########################################
 # namelist group: cfc_nml                #
 ##########################################
 
@@ -1974,7 +1986,8 @@ my @groups = qw(domain_nml
                 context_nml
                 overflows_nml
                 niw_nml
-                passive_tracers_on_nml);
+                passive_tracers_on_nml
+                filter_nml);
 
 if (any(\@OCN_TRACER_MODULES, "iage")) {
     push @groups, qw(iage_nml);

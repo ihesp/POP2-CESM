@@ -2499,8 +2499,8 @@
        endif 
      end do 
    end do 
-   write(POP_stdout,'(a8,I5,a15,I5,a15,I5)') 'PROC',POP_myTask, & 
-                    ' EVP blocks :',nb*mb, ' land blocks :', sum(landIndx)
+!   write(POP_stdout,'(a8,I5,a15,I5,a15,I5)') 'PROC',POP_myTask, & 
+!                    ' EVP blocks :',nb*mb, ' land blocks :', sum(landIndx)
 
   end subroutine EvpPre
   
