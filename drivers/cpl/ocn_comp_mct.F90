@@ -36,7 +36,7 @@ module ocn_comp_mct
 
    use kinds_mod,         only: int_kind, r8
    use ocn_import_export, only: ocn_import, ocn_export, pop_sum_buffer
-   use ocn_import_export, only: SBUFF_SUM, tlast_coupled
+   use ocn_import_export, only: SBUFF_SUM, tlast_coupled, FILTERED_SBUFF
    use POP_CplIndices
    use POP_KindsMod
    use POP_ErrorMod
@@ -69,6 +69,7 @@ module ocn_comp_mct
    use step_mod,          only: step
    use time_management
    use registry
+   use spatial_filter
 !
 ! !PUBLIC MEMBER FUNCTIONS:
   implicit none
@@ -355,6 +356,7 @@ contains
    nsend = mct_avect_nRattr(o2x_o)
    nrecv = mct_avect_nRattr(x2o_o)
    allocate (SBUFF_SUM(nx_block,ny_block,max_blocks_clinic,nsend))
+   allocate(FILTERED_SBUFF(nx_block,ny_block,max_blocks_clinic))
 
 !-----------------------------------------------------------------------
 !

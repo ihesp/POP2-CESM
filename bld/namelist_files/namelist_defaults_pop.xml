@@ -1359,6 +1359,24 @@
 <moby_use_nml_surf_vals>.false.</moby_use_nml_surf_vals>
 <moby_use_nml_surf_vals runtype="startup">.true.</moby_use_nml_surf_vals>
 
+<!---------------------------->
+<!--filter_nml -->
+<!---------------------------->
+
+<l_sst_filter>.false.</l_sst_filter>
+<filter_type>1</filter_type>
+<filter_x_span>500.0</filter_x_span>
+<filter_y_span>500.0</filter_y_span>
+<filter_r_span>500.0</filter_r_span>
+<filter_print>.false.</filter_print>
+<n_filter_regions>0</n_filter_regions>
+<region_x_spans>500.0</region_x_spans>
+<region_y_spans>500.0</region_y_spans>
+<region_min_lats>-30.0</region_min_lats>
+<region_max_lats>30.0</region_max_lats>
+<region_min_lons>0.0</region_min_lons>
+<region_max_lons>0.0</region_max_lons>
+
 <!----------------------------------->
 <!--derived - thare are temporary --->
 <!--names for variables with the  --->

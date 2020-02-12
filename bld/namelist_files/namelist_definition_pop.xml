@@ -6526,4 +6526,124 @@ group="ecosys_restore_nml" >
 Default:
 </entry>
 
+
+<!-- - - - - - - - - - - - - - - - - - -->
+<!-- Group: filter_nml                 - -->
+<!-- - - - - - - - - - - - - - - - - - -->
+
+<entry 
+id="filter_x_span"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 500km
+</entry>
+
+<entry 
+id="filter_y_span"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 500km
+</entry>
+
+<entry 
+id="filter_r_span"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 500km
+</entry>
+
+<entry 
+id="filter_type"
+type="integer" 
+category="pop2"
+group="filter_nml" >
+Default: 1 (boxcar lat-lon)
+</entry>
+
+<entry 
+id="l_sst_filter"
+type="logical"
+category="pop2"
+group="filter_nml" >
+Default: .false.
+</entry>
+
+<entry 
+id="filter_print"
+type="logical"
+category="pop2"
+group="filter_nml" >
+Default: .false.
+</entry>
+
+<entry 
+id= "filter_outfile" 
+type="char*256" 
+category="pop2" 
+group="filter_nml" >
+Default: none 
+</entry>
+
+<entry
+id="n_filter_regions"
+type="integer"
+category="pop2"
+group="filter_nml">
+Default: 0
+</entry>
+
+<entry 
+id="region_x_spans"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 500km
+</entry>
+
+<entry 
+id="region_y_spans"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 500km
+</entry>
+
+<entry 
+id="region_max_lats"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 30 degrees
+</entry>
+
+<entry 
+id="region_min_lats"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: -30 degrees
+</entry>
+
+<entry 
+id="region_max_lons"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 0
+</entry>
+
+<entry 
+id="region_min_lons"
+type="real" 
+category="pop2"
+group="filter_nml" >
+Default: 0
+</entry>
+
+
 </namelist_definition>
+
+

@@ -40,6 +40,7 @@ module ocn_import_export
    use prognostic
    use time_management
    use registry
+   use spatial_filter
 
    implicit none
    public
@@ -47,6 +48,10 @@ module ocn_import_export
 
    ! accumulated sum of send buffer quantities for averaging before being sent
    real (r8), dimension(:,:,:,:), allocatable ::  SBUFF_SUM 
+
+   ! put filter data in here so we mimic how it could be done later in the coupler 
+   ! (instead of writing over SBUFF_SUM)
+   real (r8), dimension(:,:,:), allocatable ::  FILTERED_SBUFF
 
    real (r8) :: tlast_coupled 
 
@@ -458,6 +463,17 @@ contains
 !
 !-----------------------------------------------------------------------
 
+
+  !do spatial filtering on SST (SBUFF_SUM(i,j,iblock,index_o2x_So_t))                                                           
+
+  !copy and do temp conversion here instead of in loop below                                                                       
+  FILTERED_SBUFF(:,:,:) =  SBUFF_SUM(:,:,:,index_o2x_So_t)/tlast_coupled &
+       + T0_Kelvin
+
+  !check whether do do the spatial filtering
+  if (l_sst_filter) call apply_filter(FILTERED_SBUFF)
+
+
    n = 0
    do iblock = 1, nblocks_clinic
       this_block = get_block(blocks_clinic(iblock),iblock)
@@ -465,7 +481,8 @@ contains
       do i=this_block%ib,this_block%ie
          n = n + 1
          o2x(index_o2x_So_t,n) =   &
-             SBUFF_SUM(i,j,iblock,index_o2x_So_t)/tlast_coupled + T0_Kelvin
+              FILTERED_SBUFF(i,j,iblock)
+!             SBUFF_SUM(i,j,iblock,index_o2x_So_t)/tlast_coupled + T0_Kelvin
       enddo
       enddo
    enddo
