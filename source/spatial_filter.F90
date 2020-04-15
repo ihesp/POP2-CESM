@@ -757,7 +757,7 @@ module spatial_filter
           jcol = par_jstart + j - 1
           start_pos = (j-1)*nx_global + 1
           
-          do i = 1, nx_global
+          do i = par_istart, par_iend
              i_mark = i - par_istart + 1
              if (kmt_global(i,jcol) > 0) then
                 lon = tlon_global(i,jcol) !in radians
