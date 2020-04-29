@@ -100,6 +100,8 @@ module spatial_filter
   
   integer (int_kind) :: loess_size
 
+  integer (int_kind) :: M_divide
+
 !EOP
 
 
@@ -138,6 +140,7 @@ module spatial_filter
 
      !filter regions (can only regional filter with lat/lon region - not radial)
      n_filter_regions = 0
+     M_divide = 1;
 
      !initialize
      par_filter = .false.
@@ -279,20 +282,6 @@ module spatial_filter
         endif
      endif
      
-!     !IF using loess with lat/lon regions, all region xspans must be equal 
-!     !and all region yspans must be equal
-!     if (filter_type ==4) then
-!        if (n_filter_regions > 0 ) then
-!           do nr = 1, n_filter_regions
-!              region_x_spans(nr) = filter_x_span
-!              region_y_spans(nr) = filter_y_span
-!           enddo
-!           if (my_task == master_task) then
-!              write(stdout, '(a70)') 'WARNING: Regional filters with loess smoothers must use the '
-!              write(stdout, '(a70)') '  same x_span and same y_span across regions. Resetting values to enforce.'
-!           endif
-!        endif
-!     endif
 
      !do in task parallel (don't bother for the 3deg run - having this
      ! switch is useful for debugging)
@@ -348,7 +337,9 @@ module spatial_filter
      !if parallel, need to distribute 2D array to all procs
      if (par_filter) then
         !get bounds for i
-        call get_my_range(par_jstart, par_jend, ny_global, par_istart, par_iend, nx_global)
+        call get_my_range(par_jstart, par_jend, ny_global, par_istart, par_iend, nx_global, M_divide)
+
+        
         !master must send out data
         call broadcast_array(kmt_global, master_task)
         if ( filter_type > 1) then
@@ -360,7 +351,7 @@ module spatial_filter
            call broadcast_array(tlat_global, master_task)
            call broadcast_array(tlon_global, master_task)
         endif
-     else
+     else !serial
         if (my_task == master_task ) then
            par_jstart = 1
            par_jend = ny_global
@@ -413,9 +404,9 @@ module spatial_filter
 
      loess_size = 0
 
-!     if (my_task == master_task) then
-!        write(stdout,'(a33)') '  Finished spatial filtering init'
-!     endif
+     if (my_task == master_task) then
+        write(stdout,'(a33)') '  Finished spatial filtering init'
+     endif
 
 
  end subroutine init_filter
@@ -530,7 +521,7 @@ module spatial_filter
        endif
        
        !calculate how many grid points I have
-       nrows =  (par_jend - par_jstart + 1)
+       nrows =  (par_jend - par_jstart + 1) !if no rows jstart = 1, jend = -1
        ncols = (par_iend - par_istart + 1)
        mygrid_size = ncols * nrows
 
@@ -676,12 +667,12 @@ module spatial_filter
        ncols =  (par_jend - par_jstart + 1)
        nrows = (par_iend - par_istart + 1)
 
-       if (ncols < 1) return ! some procs may not have any work
+       if (ncols < 1) return ! some procs may not have any of the domain
 
        mygrid_size = ncols * nrows
-       total_reg_size = reg_starts(mygrid_size + 1) - 1
+       total_reg_size = reg_starts(mygrid_size + 1) - 1 !a region to smooth around each grid point
 
-       if (total_reg_size < 1) return ! some procs may not have any work
+       if (total_reg_size < 1) return ! some procs may not have any smoothing to do
        
        allocate(orig_reg_starts(mygrid_size + 1))
        allocate(orig_reg_i(total_reg_size), orig_reg_j (total_reg_size))
@@ -691,6 +682,7 @@ module spatial_filter
        orig_reg_starts = reg_starts
        reg_pos = 1
 
+       !looop through each point in my grid
        do j = 1, ncols
           jcol = par_jstart + j - 1
           start_pos = (j-1)*nrows + 1
@@ -709,6 +701,7 @@ module spatial_filter
                 call rotate_coords(lat, lon, x_c, y_c, z_c)
              endif !kmt
 
+             !for this grid point (i, jcol) - look through all points in the associated region
              reg_size = orig_reg_starts(start_pos + i_mark) - orig_reg_starts(start_pos + i_mark - 1)
              reg_base =  orig_reg_starts(start_pos + i_mark - 1)
 
@@ -737,8 +730,8 @@ module spatial_filter
                 endif
 
                 dist_n = sqrt(dx*dx/U_x_span/U_x_span + dy*dy/U_y_span/U_y_span)
-                if (dist_n > 1.0) cycle
-                counter = counter + 1
+                if (dist_n > 1.0) cycle !don't need this point in the region list
+                counter = counter + 1 !else count this point
              enddo ! n loop
              reg_starts(reg_pos + 1) =  reg_starts(reg_pos) + counter
              reg_pos  = reg_pos + 1
@@ -755,8 +748,9 @@ module spatial_filter
        counter = 0
        do j = 1, ncols
           jcol = par_jstart + j - 1
-          start_pos = (j-1)*nx_global + 1
+          start_pos = (j-1)*nrows + 1
           
+
           do i = par_istart, par_iend
              i_mark = i - par_istart + 1
              if (kmt_global(i,jcol) > 0) then
@@ -1594,24 +1588,24 @@ module spatial_filter
 
 !***********************************************************************
 
-    subroutine get_my_range(mystart, myend, global_n, mystart2, myend2, global_n2)
+    subroutine get_my_range(mystart, myend, global_n, mystart2, myend2, global_n2, M_div)
 
       !!DESCRIPTION:  
-      !get the primary range to work on based on global_n
-      !if n_procs exceeds global_2, then divide based on the global_n2
+      !get the primary range to work on based on global_n (=ny_global = nlat)
+      !if n_procs exceeds global_n2, then also divide based on the global_n2 (=nx_global=nlon)
       !to simplify, we wil only divide on global_n2 uniformly (necessary for
       !communication at the end)
 
-      integer(int_kind), intent (inout) :: mystart, myend, mystart2, myend2
+      integer(int_kind), intent (inout) :: mystart, myend, mystart2, myend2, M_div
       integer(int_kind), intent (in) :: global_n, global_n2 !num points to divide up
 
-      integer(int_kind) :: nprocs, size, extra, M
+      integer(int_kind) :: nprocs, size, extra, M, mt, slice_sz
 
-      !divind based on n_global
+      !divide based on n_global
 
       nprocs = get_num_procs()
       
-       size = global_n /nprocs
+      size = global_n /nprocs
       extra = global_n - size*nprocs
 
       mystart = size*my_task;
@@ -1629,7 +1623,7 @@ module spatial_filter
          myend = -1
       endif
 
-      !modify if we have more than double the procs needed
+      !modify if we have more than twice as many procs as nlat
       if (nprocs > global_n) then
          M = nprocs / global_n
       else
@@ -1639,30 +1633,59 @@ module spatial_filter
       if (M == 1) then ! all procs have entire 2nd range
          mystart2 = 1
          myend2 = global_n2
-      else !divide the second range (so procs get half the col)
-         !subdivide the global_2 (uniformly - for master gather to work)
-         ! only allowing one division (M=2) for now - global_n2 is even
-         !must have procs by row also (so 1st row of j is procs 0 and 1)
-         M = 2 
-         if (my_task  < global_n*2) then
-            !modify original division
-            mystart = my_task/2 + 1
-            myend = mystart
-            !new division
-            extra = mod(my_task,2)
-            if (extra == 1) then !odd
-               mystart2 = global_n2/2 + 1
-               myend2 = global_n2
-            else !even
-               mystart2 = 1
-               myend2 = global_n2/2
-            end if
-         else ! no domain for this proc - leave j and define  
-            mystart2 = 1
-            myend2 = global_n2
-         endif
-      endif
+      else !divide the second range (so procs get a portion of  the cols)
+         !subdivide the global_n2 (uniformly - for master gather to work)
+         ! only allowing even divsions - global_n2 is even
+         !must have multiple procs per row then also (so if M = 2, 1st row of j is procs 0 and 1)
+         if (M > 3) then
+            ! require M even for simplicity
+            M = M - mod(M, 2)
 
+            !make sure we can divide equally - or reduce M - but not below 2 (M will be >= 4, and all grids are even to start)
+            do while (mod(global_n2, M) > 0)
+               M = M-2
+            end do
+
+            if (my_task < global_n*M) then 
+               !do new division on rows (M procs per row - e.g. for M=4, row 1 is tasks 0,1,2,3))
+               mystart = my_task/M + 1
+               myend = mystart !only one row
+               !now give new divisions
+               mt = mod(my_task, M)!determines pos in the row (so which cols are owned)
+               if (mod(global_n2, M) > 0) then
+                  call exit_POP(sigAbort,'ERROR with extra partioning in spatial_error.f90')
+               endif
+               slice_sz = global_n2/M
+               mystart2 = mt*slice_sz + 1
+               myend2 = (mt+1)*slice_sz
+            else !no domain for this proc - leave j and define 
+               mystart2 = 1
+               myend2 = global_n2
+            endif
+
+         else !M is either 2 or 3
+            M = 2 
+            if (my_task  < global_n*2) then
+               !modify original division
+               mystart = my_task/2 + 1
+               myend = mystart
+               !new division
+               extra = mod(my_task,2)
+               if (extra == 1) then !odd
+                  mystart2 = global_n2/2 + 1
+                  myend2 = global_n2
+               else !even
+                  mystart2 = 1
+                  myend2 = global_n2/2
+               end if
+            else ! no domain for this proc - leave j and define  
+               mystart2 = 1
+               myend2 = global_n2 
+            endif
+         endif
+      endif !end of M=1
+
+      M_div = M
 
     end subroutine get_my_range
 
@@ -1700,7 +1723,7 @@ module spatial_filter
 
       ! !DESCRIPTION:  
       !routine for the master task to gather the data from the other in the 2D array
-      !format - eventually this needs to be in a seperate file in the MPI directory
+      !format - eventually this needs to be in a separate file in the MPI directory
 
 
       include 'mpif.h'  ! MPI Fortran include file
@@ -1708,7 +1731,7 @@ module spatial_filter
 
       real (r8), intent(inout), dimension(:,:), target :: mywork
       integer (int_kind), dimension(:), allocatable:: recv_cts, displs
-      integer (int_kind) :: ierr, mycount, i, nrows, row_num, extra
+      integer (int_kind) :: ierr, mycount, i, nrows, row_num, extra, mt
       integer(int_kind) :: nprocs, num_message, buf_start, buf_end
       integer (int_kind) :: mytag, dest_proc
       integer (int_kind) :: myrequest, mystatus
@@ -1720,11 +1743,9 @@ module spatial_filter
       nprocs = get_num_procs()
       mytag = nprocs + 10000
 
-      nrows = par_iend - par_istart + 1 !this will be the same on all procs
-                                        !that own some of the domain
-                                        ! (either nx_global or nx_global/20
-                                        ! if master task does not own domain
-                                        ! then calculate for master
+      nrows = nx_global/M_divide !all procs that own data have 
+                                 !the same portion of the row
+
       !fortran stores column-wise (each col has nx row in it)
       if (par_jstart > par_jend) then
          mycount = 0
@@ -1732,16 +1753,8 @@ module spatial_filter
          mycount = (par_jend - par_jstart + 1) * nrows
       endif
 
-      ! all tasks need to know nrows - even if it does not own domain
-      if (mycount ==0) then
-         nrows = nx_global
-         if (nprocs >= nx_global*2) then
-            nrows = nx_global/2
-         endif
-      endif
-
-      !is this the case where pros own half a row?
-      if (nrows == nx_global/2) then
+      !is this the case where pros own a partial row?
+      if (M_divide > 1) then
          row_divide = .true.
       endif
       
@@ -1757,7 +1770,7 @@ module spatial_filter
       call MPI_Gather(mycount, 1, mpi_integer, recv_cts, 1, mpi_integer, &
            master_task, MPI_COMM_OCN, ierr)
 
-      if (.not. row_divide) then ! rows are divided in two
+      if (.not. row_divide) then ! rows are not divided
          if (my_task == master_task) then
             displs(1) = 0
             do i = 2, nprocs + 1
@@ -1788,7 +1801,7 @@ module spatial_filter
                call MPI_Wait(myrequest, mystatus, ierr)
             endif
          endif
-      else ! we have divided the rows in half
+      else ! we have divided the rows (M-divide > 1)
          if (my_task == master_task) then
             num_message = 0
             do i = 1, nprocs
@@ -1797,16 +1810,12 @@ module spatial_filter
                if (recv_cts(i) == 0) cycle
                num_message = num_message + 1
                !which row? (follows from get_my_range function)
-               row_num = dest_proc/2 + 1
-               !which half of row do they have?
-               extra = mod(dest_proc, 2)
-               if (extra == 1) then !odd
-                  buf_start = nx_global/2 + 1
-                  buf_end = nx_global
-               else !even
-                  buf_start = 1
-                  buf_end = nx_global/2
-               end if
+               row_num = dest_proc/M_divide + 1
+               !which portion of the row do they have?
+               mt = mod(dest_proc, M_divide)
+               buf_start = mt*nrows+1
+               buf_end = (mt+1)*nrows
+
                call MPI_Irecv(mywork(buf_start:buf_end, row_num), recv_cts(i), MPI_DBL, &
                     dest_proc, mytag, MPI_COMM_OCN, & a_request(num_message), ierr)
             enddo
@@ -1822,10 +1831,7 @@ module spatial_filter
             endif
          endif
 
-
-
-
-      endif
+      endif !rows divided
 
       if (my_task == master_task) then
          deallocate(recv_cts, displs, a_request, a_status)
