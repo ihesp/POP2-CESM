@@ -651,6 +651,13 @@
     <decomptype>spacecurve</decomptype>
   </decomp>
 
+  <decomp nproc="1788" res="tx0.1v2" >
+    <maxblocks >1</maxblocks>
+    <bsize_x   >60</bsize_x>
+    <bsize_y   >60</bsize_y>
+    <decomptype>spacecurve</decomptype>
+  </decomp>
+
   <decomp nproc="1920" res="tx0.1v2" >
     <maxblocks >1</maxblocks>
     <bsize_x   >60</bsize_x>
